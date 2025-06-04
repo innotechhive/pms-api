@@ -1,109 +1,130 @@
-import { DataTypes, Model, Optional } from 'sequelize';
-import { sequelize } from '../config/db'; // Your Sequelize instance
+import { Model, DataTypes } from 'sequelize';
+import sequelize from '../config/database';
 
-interface PatientAttributes {
-  patient_id: number;
-  first_name: string;
-  last_name: string;
-  date_of_birth: string;
-  gender?: string;
-  phone_number?: string;
-  email?: string;
-  address?: string;
-  emergency_contact_name?: string;
-  emergency_contact_number?: string;
-  created_at?: Date;
-  updated_at?: Date;
-}
-
-interface PatientCreationAttributes
-  extends Optional<
-    PatientAttributes,
-    'patient_id' | 'created_at' | 'updated_at'
-  > {}
-
-class Patient
-  extends Model<PatientAttributes, PatientCreationAttributes>
-  implements PatientAttributes
-{
-  public patient_id!: number;
-  public first_name!: string;
-  public last_name!: string;
-  public date_of_birth!: string;
-  public gender?: string;
-  public phone_number?: string;
+class Patient extends Model {
+  public id!: number;
+  public uhid!: string;
+  public title!: string;
+  public firstName!: string;
+  public middleName?: string;
+  public lastName?: string;
+  public gender!: string;
+  public genderExtension?: string;
+  public dateOfBirth!: Date;
+  public birthPlace?: string;
+  public birthTime?: string;
+  public mobileNumber!: string;
+  public alternateMobile?: string;
   public email?: string;
-  public address?: string;
-  public emergency_contact_name?: string;
-  public emergency_contact_number?: string;
-  public created_at!: Date;
-  public updated_at!: Date;
-
-  // Timestamps
+  public relation?: string;
+  public relationName?: string;
+  public referralSource?: string;
+  public religion?: string;
+  public specialCare?: boolean;
+  public specialCourtesy?: string;
+  public decease!: boolean;
+  public isActive!: boolean;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
 
 Patient.init(
   {
-    patient_id: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    uhid: {
+      type: DataTypes.STRING,
+      unique: true,
       allowNull: false,
     },
-    first_name: {
-      type: DataTypes.STRING(100),
+    title: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    last_name: {
-      type: DataTypes.STRING(100),
-      allowNull: true, // Optional
-    },
-    date_of_birth: {
-      type: DataTypes.DATEONLY,
+    firstName: {
+      type: DataTypes.STRING,
       allowNull: false,
+    },
+    middleName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     gender: {
-      type: DataTypes.STRING(10),
-      allowNull: true, // Optional
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    phone_number: {
-      type: DataTypes.STRING(15),
-      allowNull: true, // Optional
+    genderExtension: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    dateOfBirth: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    birthPlace: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    birthTime: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    mobileNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    alternateMobile: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
     email: {
-      type: DataTypes.STRING(100),
-      allowNull: true, // Optional
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    address: {
-      type: DataTypes.STRING(100),
-      allowNull: true, // Optional
+    relation: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    emergency_contact_name: {
-      type: DataTypes.STRING(100),
-      allowNull: true, // Optional
+    relationName: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    emergency_contact_number: {
-      type: DataTypes.STRING(15),
-      allowNull: true, // Optional
+    referralSource: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    created_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
+    religion: {
+      type: DataTypes.STRING,
+      allowNull: true,
     },
-    updated_at: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-      allowNull: false,
+    specialCare: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
+    specialCourtesy: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    decease: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    isActive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
     },
   },
   {
-    sequelize, // Pass in the sequelize instance
+    sequelize,
     modelName: 'Patient',
-    tableName: 'patient',
-    timestamps: false, // Disable Sequelize auto timestamps as we use custom ones
+    tableName: 'patients',
   }
 );
 
